@@ -20,5 +20,13 @@ yarn build
 yarn lint
 ```
 
+### Tauri serve
+```
+yarn tauri:serve
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Tauri guides
+https://tauri.app/v1/guides/
