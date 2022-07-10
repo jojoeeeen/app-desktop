@@ -1,5 +1,5 @@
 <template>
-  <button v-on:click="startReadAloud">読み上げ開始/終了</button>
+  <button @click="startReadAloud">読み上げ開始/終了</button>
 </template>
 
 <script>
