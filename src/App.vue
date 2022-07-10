@@ -1,8 +1,15 @@
-<template></template>
+<template>
+  <button v-on:click="startReadAloud">読み上げ開始/終了</button>
+</template>
 
 <script>
 export default {
   name: "App",
+  methods: {
+    startReadAloud() {
+      console.log("yomiage");
+    },
+  },
 };
 </script>
 
