@@ -1,16 +1,23 @@
 <template>
   <button @click="startReadAloud">読み上げ開始/終了</button>
+  <button @click="execSampleFn">Rust関数実行</button>
 </template>
 
 <script>
+import { tauri } from '@tauri-apps/api';
+
 export default {
-  name: "App",
+  name: 'App',
   methods: {
     startReadAloud() {
       console.log("yomiage");
     },
-  },
-};
+    async execSampleFn() {
+      let ret = await tauri.invoke("sample_fn");
+      console.log("sample_fn result:", ret);
+    }
+  }
+}
 </script>
 
 <style>
