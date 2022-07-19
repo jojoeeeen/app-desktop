@@ -3,19 +3,21 @@
   <button @click="execSampleFn">Rust関数実行</button>
 </template>
 
-<script>
-import { tauri } from '@tauri-apps/api';
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
+import { tauri } from "@tauri-apps/api";
 
-export default {
-  name: 'App',
-  methods: {
-    startReadAloud() {
-      console.log("yomiage");
-    },
-    async execSampleFn() {
-      let ret = await tauri.invoke("sample_fn");
-      console.log("sample_fn result:", ret);
-    }
+@Options({
+  components: {},
+})
+export default class App extends Vue {
+  startReadAloud() {
+    console.log("yomiage");
+  }
+
+  async execSampleFn() {
+    let ret = await tauri.invoke("sample_fn");
+    console.log("sample_fn result:", ret);
   }
 }
 </script>
