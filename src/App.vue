@@ -2,11 +2,15 @@
   <button v-if="!read" @click="startReadAloud">読み上げ開始</button>
   <button v-else @click="stopReadAloud">読み上げ停止</button>
   <button @click="execSampleFn">Rust関数実行</button>
+  <button @click="() => readChatAloud('生成テスト')">VoiceQuery生成テスト</button>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { tauri } from "@tauri-apps/api";
+import client from "./api";
+
+import type { VoiceQuery } from "./api/types";
 
 @Options({
   components: {},
@@ -38,10 +42,11 @@ export default class App extends Vue {
     return ["草", "ワロタ", "ここすこ"];
   }
 
-  readChatAloud(chat: string) {
-    // tauri.invoke("read_chat_aloud");
-
+  async readChatAloud(chat: string) {
+    const speaker = 1;
+    let voiceQuery: VoiceQuery = await client.generate_query(speaker, chat);
     console.log(chat);
+    console.log(voiceQuery);
   }
 
   async execSampleFn() {
