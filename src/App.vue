@@ -5,6 +5,15 @@
   <x-button @click="() => readChatAloud('生成テスト')">
     VoiceQuery生成テスト
   </x-button>
+
+  <suspense>
+    <template #default>
+      <settings-base />
+    </template>
+    <template #fallback>
+      <p>Loading...</p>
+    </template>
+  </suspense>
 </template>
 
 <script lang="ts">
@@ -15,11 +24,13 @@ import client from "./api";
 import type { VoiceQuery, WavBase64 } from "./api/types";
 
 import XButton from "./components/XButton";
+import SettingsBase from './components/SettingsBase.vue';
 
 @Options({
   components: {
     XButton,
-  },
+    SettingsBase,
+  }
 })
 export default class App extends Vue {
   read = false;
