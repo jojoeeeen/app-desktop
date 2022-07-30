@@ -23,8 +23,6 @@ pub async fn generate_query(speaker: i64, text: String) -> Result<String, String
             println!("{:?}", query);
             Ok(query.to_string())
         }
-        Err(msg) => {
-            Err(msg.to_string())
-        }
+        Err(msg) => Err(msg.to_string()),
     }
 }
