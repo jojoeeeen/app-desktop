@@ -26,3 +26,5 @@ export interface VoiceQuery {
   outputStereo: boolean;
   kana: string;
 }
+
+export type WavBase64 = string;

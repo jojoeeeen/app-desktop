@@ -10,7 +10,7 @@ import { Options, Vue } from "vue-class-component";
 import { tauri } from "@tauri-apps/api";
 import client from "./api";
 
-import type { VoiceQuery } from "./api/types";
+import type { VoiceQuery, WavBase64 } from "./api/types";
 
 @Options({
   components: {},
@@ -45,8 +45,10 @@ export default class App extends Vue {
   async readChatAloud(chat: string) {
     const speaker = 1;
     let voiceQuery: VoiceQuery = await client.generate_query(speaker, chat);
-    console.log(chat);
-    console.log(voiceQuery);
+    let voice: WavBase64 = await client.generate_voice(speaker, voiceQuery);
+
+    const audio = new Audio('data:audio/wav;base64,' + voice);
+    audio.play();
   }
 
   async execSampleFn() {
