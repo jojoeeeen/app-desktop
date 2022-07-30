@@ -1,15 +1,19 @@
 <template>
-  <button v-if="!read" @click="startReadAloud">読み上げ開始</button>
-  <button v-else @click="stopReadAloud">読み上げ停止</button>
-  <button @click="execSampleFn">Rust関数実行</button>
+  <x-button v-if="!read" @click="startReadAloud">読み上げ開始</x-button>
+  <x-button v-else @click="stopReadAloud">読み上げ停止</x-button>
+  <x-button @click="execSampleFn">Rust関数実行</x-button>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { tauri } from "@tauri-apps/api";
 
+import XButton from "./components/XButton";
+
 @Options({
-  components: {},
+  components: {
+    XButton,
+  },
 })
 export default class App extends Vue {
   read = false;
