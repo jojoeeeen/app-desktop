@@ -19,10 +19,7 @@ async fn get_query(speaker: i64, text: String) -> Result<String, Box<dyn Error>>
 pub async fn generate_query(speaker: i64, text: String) -> Result<String, String> {
     let ret: Result<String, Box<dyn Error>> = get_query(speaker, text).await;
     match ret {
-        Ok(query) => {
-            println!("{:?}", query);
-            Ok(query.to_string())
-        }
+        Ok(query) => Ok(query.to_string()),
         Err(msg) => Err(msg.to_string()),
     }
 }
