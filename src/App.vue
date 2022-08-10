@@ -2,7 +2,9 @@
   <button v-if="!read" @click="startReadAloud">読み上げ開始</button>
   <button v-else @click="stopReadAloud">読み上げ停止</button>
   <button @click="execSampleFn">Rust関数実行</button>
-  <button @click="() => readChatAloud('生成テスト')">VoiceQuery生成テスト</button>
+  <button @click="() => readChatAloud('生成テスト')">
+    VoiceQuery生成テスト
+  </button>
 </template>
 
 <script lang="ts">
@@ -26,7 +28,9 @@ export default class App extends Vue {
       // TODO: パフォーマンスが悪ければ別ループに切り出して chats をキューする
       const chats = this.getChats();
 
-      chats.forEach((chat) => this.readChatAloud(chat));
+      for (let i = 0; i < chats.length; i++) {
+        await this.readChatAloud(chats[i]);
+      }
 
       await _sleep(30000);
     }
@@ -47,8 +51,15 @@ export default class App extends Vue {
     let voiceQuery: VoiceQuery = await client.generate_query(speaker, chat);
     let voice: WavBase64 = await client.generate_voice(speaker, voiceQuery);
 
-    const audio = new Audio('data:audio/wav;base64,' + voice);
-    audio.play();
+    const play = () => {
+      return new Promise((resolve) => {
+        const audio = new Audio("data:audio/wav;base64," + voice);
+        audio.onended = resolve;
+        audio.play();
+      });
+    };
+
+    await play();
   }
 
   async execSampleFn() {
