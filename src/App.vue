@@ -1,8 +1,8 @@
 <template>
-  <button v-if="!read" @click="startReadAloud">読み上げ開始</button>
-  <button v-else @click="stopReadAloud">読み上げ停止</button>
-  <button @click="execSampleFn">Rust関数実行</button>
-  <button @click="() => readChatAloud('生成テスト')">
+  <x-button v-if="!read" @click="startReadAloud">読み上げ開始</button>
+  <x-button v-else @click="stopReadAloud">読み上げ停止</button>
+  <x-button @click="execSampleFn">Rust関数実行</button>
+  <x-button @click="() => readChatAloud('生成テスト')">
     VoiceQuery生成テスト
   </button>
 </template>
@@ -14,8 +14,12 @@ import client from "./api";
 
 import type { VoiceQuery, WavBase64 } from "./api/types";
 
+import XButton from "./components/XButton";
+
 @Options({
-  components: {},
+  components: {
+    XButton,
+  },
 })
 export default class App extends Vue {
   read = false;
