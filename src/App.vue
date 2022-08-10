@@ -1,12 +1,18 @@
 <template>
-  <x-button v-if="!read" @click="startReadAloud">読み上げ開始</x-button>
-  <x-button v-else @click="stopReadAloud">読み上げ停止</x-button>
-  <x-button @click="execSampleFn">Rust関数実行</x-button>
+  <x-button v-if="!read" @click="startReadAloud">読み上げ開始</button>
+  <x-button v-else @click="stopReadAloud">読み上げ停止</button>
+  <x-button @click="execSampleFn">Rust関数実行</button>
+  <x-button @click="() => readChatAloud('生成テスト')">
+    VoiceQuery生成テスト
+  </button>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { tauri } from "@tauri-apps/api";
+import client from "./api";
+
+import type { VoiceQuery, WavBase64 } from "./api/types";
 
 import XButton from "./components/XButton";
 
@@ -26,7 +32,9 @@ export default class App extends Vue {
       // TODO: パフォーマンスが悪ければ別ループに切り出して chats をキューする
       const chats = this.getChats();
 
-      chats.forEach((chat) => this.readChatAloud(chat));
+      for (let i = 0; i < chats.length; i++) {
+        await this.readChatAloud(chats[i]);
+      }
 
       await _sleep(30000);
     }
@@ -42,10 +50,20 @@ export default class App extends Vue {
     return ["草", "ワロタ", "ここすこ"];
   }
 
-  readChatAloud(chat: string) {
-    // tauri.invoke("read_chat_aloud");
+  async readChatAloud(chat: string) {
+    const speaker = 1;
+    const voiceQuery: VoiceQuery = await client.generate_query(speaker, chat);
+    const voice: WavBase64 = await client.generate_voice(speaker, voiceQuery);
 
-    console.log(chat);
+    const play = () => {
+      return new Promise((resolve) => {
+        const audio = new Audio("data:audio/wav;base64," + voice);
+        audio.onended = resolve;
+        audio.play();
+      });
+    };
+
+    await play();
   }
 
   async execSampleFn() {
