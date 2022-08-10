@@ -48,8 +48,8 @@ export default class App extends Vue {
 
   async readChatAloud(chat: string) {
     const speaker = 1;
-    let voiceQuery: VoiceQuery = await client.generate_query(speaker, chat);
-    let voice: WavBase64 = await client.generate_voice(speaker, voiceQuery);
+    const voiceQuery: VoiceQuery = await client.generate_query(speaker, chat);
+    const voice: WavBase64 = await client.generate_voice(speaker, voiceQuery);
 
     const play = () => {
       return new Promise((resolve) => {
