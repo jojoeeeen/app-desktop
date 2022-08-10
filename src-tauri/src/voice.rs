@@ -39,7 +39,7 @@ pub struct VoiceQuery {
     kana: Option<String>,
 }
 
-async fn get_query(speaker: i64, text: String) -> Result<String, Box<dyn Error>> {
+async fn _generate_query(speaker: i64, text: String) -> Result<String, Box<dyn Error>> {
     let mut params = HashMap::new();
     params.insert("speaker", speaker.to_string());
     params.insert("text", text);
@@ -52,14 +52,14 @@ async fn get_query(speaker: i64, text: String) -> Result<String, Box<dyn Error>>
 
 #[tauri::command]
 pub async fn generate_query(speaker: i64, text: String) -> Result<String, String> {
-    let ret: Result<String, Box<dyn Error>> = get_query(speaker, text).await;
+    let ret: Result<String, Box<dyn Error>> = _generate_query(speaker, text).await;
     match ret {
         Ok(query) => Ok(query.to_string()),
         Err(msg) => Err(msg.to_string()),
     }
 }
 
-async fn get_voice(speaker: i64, query_text: String) -> Result<String, Box<dyn Error>> {
+async fn _generate_voice(speaker: i64, query_text: String) -> Result<String, Box<dyn Error>> {
     let query: VoiceQuery = serde_json::from_str(&query_text).unwrap();
     let mut params = HashMap::new();
     params.insert("speaker", speaker.to_string());
@@ -72,7 +72,7 @@ async fn get_voice(speaker: i64, query_text: String) -> Result<String, Box<dyn E
 
 #[tauri::command]
 pub async fn generate_voice(speaker: i64, query: String) -> Result<String, String> {
-    let ret: Result<String, Box<dyn Error>> = get_voice(speaker, query).await;
+    let ret: Result<String, Box<dyn Error>> = _generate_voice(speaker, query).await;
     match ret {
         Ok(query) => Ok(query.to_string()),
         Err(msg) => Err(msg.to_string()),
