@@ -17,10 +17,8 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  props: {
-    items: Array,
-  },
-}
+<script setup lang="ts">
+defineProps({
+  items: { type: Array },
+})
 </script>
