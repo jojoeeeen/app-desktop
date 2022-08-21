@@ -24,15 +24,19 @@ type MuteWord = string;
 
 type MuteWords = ListData<MuteWord>;
 
+const useStoreMock = process.env.VUE_APP_USE_STORE_MOCK;
 const items = ref(['']);
 items.value = await loadItems();
 
 async function loadItems(): Promise<string[]> {
   await store.load();
-
   const v = await store.get<MuteWords>('mute-words');
-  if (!v?.items) {
-    return [];
+
+  if (useStoreMock) {
+    return ['this is mocked value', 'hello', 'world', '!'];
+  }
+  if(!v) {
+    throw new Error('mute-words is null.')
   }
   return v.items;
 }
