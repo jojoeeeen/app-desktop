@@ -13,16 +13,9 @@
 import { ref } from 'vue';
 import { store } from '@/core/store';
 import XButton from '@/components/XButton'
+import { MuteWords } from '@/types/mute-words'
 
 import MuteWordTable from './MuteWordTable';
-
-type ListData<T> = {
-  items: T[],
-}
-
-type MuteWord = string;
-
-type MuteWords = ListData<MuteWord>;
 
 const useStoreMock = process.env.VUE_APP_USE_STORE_MOCK;
 const items = ref(['']);
