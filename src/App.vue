@@ -16,52 +16,46 @@
   </suspense>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
+<script setup lang="ts">
+import { ref } from 'vue'
 import { tauri } from "@tauri-apps/api";
 import client from "./api";
 
 import type { VoiceQuery, WavBase64 } from "./api/types";
 
-import XButton from "./components/XButton";
-import SettingsBase from './components/SettingsBase.vue';
+import XButton from '@/components/XButton';
+import SettingsBase from '@/components/SettingsBase.vue';
 
-@Options({
-  components: {
-    XButton,
-    SettingsBase,
-  }
-})
-export default class App extends Vue {
-  read = false;
-  async startReadAloud() {
-    const _sleep = (ms: number) =>
-      new Promise((resolve) => setTimeout(resolve, ms));
+const read = ref(false);
 
-    this.read = true;
-    while (this.read) {
-      // TODO: パフォーマンスが悪ければ別ループに切り出して chats をキューする
-      const chats = this.getChats();
+const startReadAloud = async ()  => {
+  const _sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  read.value = true;
+  while (read.value) {
+    // TODO: パフォーマンスが悪ければ別ループに切り出して chats をキューする
+    const chats = getChats();
 
       for (let i = 0; i < chats.length; i++) {
-        await this.readChatAloud(chats[i]);
+        await readChatAloud(chats[i]);
       }
 
-      await _sleep(30000);
-    }
+    await _sleep(30000);
   }
+}
 
-  stopReadAloud() {
-    this.read = false;
-  }
+const stopReadAloud = () => {
+  read.value = false;
+}
 
-  getChats(): string[] {
-    // tauri.invoke("get_chats");
+const getChats = ():string[] => {
+  // tauri.invoke("get_chats");
 
-    return ["草", "ワロタ", "ここすこ"];
-  }
+  return ["草", "ワロタ", "ここすこ"];
+}
 
-  async readChatAloud(chat: string) {
+const readChatAloud = async (chat: string) => {
     const speaker = 1;
     const voiceQuery: VoiceQuery = await client.generate_query(speaker, chat);
     const voice: WavBase64 = await client.generate_voice(speaker, voiceQuery);
@@ -75,12 +69,11 @@ export default class App extends Vue {
     };
 
     await play();
-  }
+}
 
-  async execSampleFn() {
-    let ret = await tauri.invoke("sample_fn");
-    console.log("sample_fn result:", ret);
-  }
+const execSampleFn = async () => {
+  let ret = await tauri.invoke("sample_fn");
+  console.log("sample_fn result:", ret);
 }
 </script>
 
